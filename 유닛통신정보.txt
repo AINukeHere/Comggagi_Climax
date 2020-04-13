@@ -1,0 +1,18 @@
+프로토스
+    aiscript > 트리거
+        Protoss Rush End 알림 : Fenix (Zealot)
+        커맨드센터 제작완료 알림 받음 확인 : Zeratul (Dark Templar)
+        팩토리 제작완료 알림 받음 확인 : Tassadar (Templar)
+        머신샵 제작완료 알림 받음 확인 : Warbringer (Reaver)
+        아머리 제작완료 알림 받음 확인 : Rhynadon (Badlands Critter)
+        엔지니어링 베이 제작완료 알림 받음 확인 : Kakaru (Twilight Critter)
+        빼앗을 SCV까 없음 알림 : Samir Duran (Ghost)
+    트리거 > aiscript
+        커맨드센터 제작완료 알림 : Fenix (Dragoon)
+        팩토리 제작완료 알림 : Artanis (Scout)
+        머신샵 제작완료 알림 : Mojo (Scout)
+        아머리 제작완료 알림 : Gantrithor (Carrier)
+        엔지니어링 베이 제작완료 알림 : Bengalaas (Jungle Critter)
+        빼앗을 SCV까 없음 알림 : Ragnasaur (Ashworld Critter)
+    트리거
+        아비터 밑이 지상인지 체크 : Dark Templar (Hero)

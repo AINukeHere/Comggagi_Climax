@@ -1,0 +1,10 @@
+[main]
+input:  basemap/컴까기 특이점.scx
+output: 컴까기 특이점_Alpha_Test.scx
+
+[eudTurbo]
+[unlimiter]
+[source/main.py]
+#[source/CUnitTest.py]
+[dataDumper]
+source/aiscripts/aiscript.bin:0x68C104, copy
