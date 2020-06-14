@@ -1,38 +1,23 @@
 from eudplib import *
 from GiveMeSCV import *
 import util
-from AttackThis import AttackThisArea
 import Setting
 import TerranBuild
-import eudplib
-
-# import TileManager
-# import JobManager
-# import unitLoop
-# import BuildingInfo
-
-# TileManager.init()
-# p1_spX = None
-# p1_spY = None
+import DefenseSystem
+import FxingReaverScarab
 
 
 group = EUDVariable(0)
-entrance = EUDVariable(0)
 def onPluginStart():
-    # DoActions([
-    #     CreateUnit(1, "Terran Civilian", "GiveMeSCV_Destination", P8),
-    #     Order("Terran Civilian", P8, "Anywhere", Move, "Anywhere"),
-    #     # 시민의 생산크기 0 0 설정
-    #     SetMemory(0x66289C, SetTo, 0),
-    # ])
-    global group, entrance
-    entrance = AttackThisArea.alloc(2,3)
-    entrance.addAttackPlayer(6)
-    entrance.addAttackPlayer(7)
-    entrance.addTargetPlayer(0)
-    entrance.addTargetPlayer(1)
-    entrance.addTargetPlayer(2)
-    entrance.SetArea(EncodeLocation('EntranceLoc1') - 1)
+    if Setting.CHEAT_DEBUG:
+        DoActions([
+            CreateUnit(1, "Terran Civilian", "CheatBeaconMove", P4),
+            SetInvincibility(Enable, "Terran Civilian", P4, "Anywhere"),
+            CreateUnit(1, "Terran Beacon", "CheatBeacon", P4),
+            # 시민의 생산크기 0 0 설정
+            #SetMemory(0x66289C, SetTo, 0),
+        ])
+    global group
     group = StrategyGroup.alloc()
     
     f_randomize()
@@ -77,13 +62,8 @@ def onPluginStart():
         SetMemoryEPD(ProtossMax          + 7, SetTo, 600), # P8 Protoss Max
     ])
 
-def CUnit(idx):
-    if idx == 0:
-        return 0x59CCA8
-    else:
-        return 0x628298 - 0x150*(idx-1)
 def beforeTriggerExec():    
-    global group, entrance
+    global group
 
     # GiveMeSCV 시작할 지 결정
     flag = EUDVariable(0)
@@ -91,50 +71,78 @@ def beforeTriggerExec():
         (ElapsedTime(AtLeast, 5))
         (flag == 0)
         ()):
-        flag << 1
+        
         if EUDIf()(Command(AllPlayers, AtLeast, 1, "Terran SCV")):
             group.groupState = GROUP_STATE_0FIND_MEMBER
+            flag << 1
         if EUDElse()():
             DoActions(CreateUnit(1, "Ragnasaur (Ashworld Critter)", "7pBase", P7))
+            flag << 2
         EUDEndIf()
     EUDEndIf()
 
+    ### NewUnitLoop ###
+    for ptr,epd in LoopNewUnit():
+        FxingReaverScarab.onNewUnitLoop(epd)
+
     ### UnitLoop ###
-    group.beforeUnitLoop() # SCV 가져오는 그룹
-    entrance.beforeUnitLoop() # 입구건물때리기
-    TerranBuild.beforeUnitLoop() # 테란하자
-    if EUDIf()(EUDSCAnd()
-    (ElapsedTime(AtMost, 450))
-    #(Bring(Force1, AtMost, 0, "Any unit", "EntranceLoc1"))
-    (Bring(Force1, AtMost, 0, "Men", "EntranceLoc1"))
-    ()):
+    if EUDIf()(flag == 2):
         for ptr,epd in EUDLoopUnit():
-            util.ReaverScarabFixing(epd) # 스캐럽 1개로 고정
+            util.IrradiateOut(epd) # 이레디 맞은 유닛 빼기
+    if EUDElseIf()(flag == 1):
+        group.beforeUnitLoop() # SCV 가져오는 그룹
+        TerranBuild.beforeUnitLoop() # 테란하자
+        for ptr,epd in EUDLoopUnit():
             util.IrradiateOut(epd) # 이레디 맞은 유닛 빼기
             group.UnitLoopUpdate(ptr, epd)
-            entrance.onUnitLoop(ptr, epd)
             TerranBuild.onUnitLoop(epd)
-    if EUDElse()():
-        for ptr,epd in EUDLoopUnit():
-            util.ReaverScarabFixing(epd) # 스캐럽 1개로 고정
-            util.IrradiateOut(epd) # 이레디 맞은 유닛 빼기
-            group.UnitLoopUpdate(ptr, epd)
-            #entrance.onUnitLoop(ptr, epd)
-            TerranBuild.onUnitLoop(epd)
+        group.afterUnitLoop()
+        TerranBuild.afterUnitLoop()
     EUDEndIf()
-    group.afterUnitLoop()
-    TerranBuild.afterUnitLoop()
-    if EUDIf()(Deaths(P7, Exactly, 1, "Time 3")):
-        entrance.changeRandomTarget()
-        #f_simpleprint("random target set")
-    EUDEndIf()
-    if Setting.ENTRANCE_ATTACKER_PRINT:
-        f_simpleprint("attacker : ", entrance.currentFrameTargetInfo[2])
-        entrance.currentFrameTargetInfo[2] = 0
+    
     ### UnitLoop ###
 
-    #util.ShowSupplies() # 인구수 출력
+    FxingReaverScarab.beforeTriggerExec() # 스캐럽 1개로 고정
     util.LocationResizing() # 각종 로케이션 위치갱신
+    DefenseSystem.detectTimingRush() # 적 병력 움직임 체크
+
+    #######################################
+    ###           DEBUG CODE            ###
+    #######################################
+    
+    #util.ShowSupplies() # 인구수 출력
+    # 클릭한 유닛 정보 표시
+    if Setting._DEBUG:
+        P1_Select_ptr = f_dwread_epd(EPD(0x6284E8))
+        if EUDIf()(P1_Select_ptr != 0):
+            select_epd = EPD(P1_Select_ptr)
+            orderID = select_epd + 0x4D // 4
+            curSpeed1 = select_epd + 0x38 // 4
+            curSpeed2 = select_epd + 0x3C // 4
+            orderState = select_epd + 0x4E // 4
+            movementFlags = select_epd + 0x20 // 4
+            f_simpleprint(select_epd, 
+                f_bread_epd(orderID, 0x4D % 4), 
+                f_bread_epd(orderState, 0x4E % 4), 
+                f_bread_epd(movementFlags, 0x20 % 4),
+                TerranBuild.idleSCV_epd
+                )
+        EUDEndIf()
+    if Setting.CHEAT_DEBUG:
+        bCheatOn = EUDVariable(0)
+        if EUDIf()(Bring(P4, AtLeast, 1, "Terran Civilian", "CheatBeacon")):
+            cheatFlag = EPD(0x6D5A6C)
+            if EUDIf()(bCheatOn == 0):
+                bCheatOn << 1
+                f_simpleprint("무적이 켜졌습니다.")
+                DoActions(SetMemoryXEPD(cheatFlag, SetTo, 0x4, 0x4))
+            if EUDElse()():
+                bCheatOn << 0
+                f_simpleprint("무적이 꺼졌습니다.")
+                DoActions(SetMemoryXEPD(cheatFlag, SetTo, 0x0, 0x4))
+            EUDEndIf()
+            DoActions(MoveUnit(1, "Terran Civilian", P4, "CheatBeacon", "CheatBeaconMove"))
+        EUDEndIf()
 
 leaderboardTime = EUDVariable(0)
 def afterTriggerExec():
@@ -144,3 +152,30 @@ def afterTriggerExec():
         leaderboardTime << 0
         util.UpdateResourceUsed()
     EUDEndIf()
+
+
+newCUnit = EUDArray(1700 * 336)
+epd2newCUnit = EPD(newCUnit) - EPD(0x59CCA8)
+def LoopNewUnit(allowance=2):
+    firstUnitPtr = EPD(0x628430)
+    EUDCreateBlock("newunitloop", "newlo")
+    tos0 = EUDLightVariable()
+    tos0 << 0
+
+    ptr, epd = f_cunitepdread_epd(firstUnitPtr)
+    if EUDWhile()(ptr >= 1):
+        tos1 = f_bread_epd(epd + 0xA5 // 4, 1)
+        global epd2newCUnit
+        tos2 = epd + epd2newCUnit
+        if EUDIfNot()(MemoryEPD(tos2, Exactly, tos1)):
+            DoActions(SetMemoryEPD(tos2, SetTo, tos1))
+            yield ptr, epd
+        if EUDElse()():
+            DoActions(tos0.AddNumber(1))
+            EUDBreakIf(tos0.AtLeast(allowance))
+        EUDEndIf()
+        EUDSetContinuePoint()
+        f_cunitepdread_epd(epd + 1, ret=[ptr, epd])
+    EUDEndWhile()
+
+    EUDPopBlock("newunitloop")

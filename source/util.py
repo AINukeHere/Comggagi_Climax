@@ -227,48 +227,67 @@ def LocationResizing():
 
 
     DoActions([
-        MoveLocation("ArbiterSmallLoc","Terran Marine", P12, "ArbiterLoc"),
-        MoveLocation("FollowArbiterOnlyGround","Terran Marine", P12, "FollowArbiter"),
+        MoveLocation("ArbiterSmallLoc","Terran Marker", P12, "ArbiterLoc"),
+        MoveLocation("FollowArbiterOnlyGround","Terran Marker", P12, "FollowArbiter"),
         MoveLocation("FollowArbiter","Protoss Arbiter", P7, "FollowArbiter"),
     ])
     ###ArbiterPathFindingLocations###
 
-    # Location Visualize
-    if Setting._DEBUG:
+
+    ### Detect Enemy Arbiter ###
+    DoActions([
+        MoveLocation("EnemyArbiter","Protoss Arbiter", Force1, "EnemyArbiterDetectArea"),
+        MoveLocation("EnemyArbiterGround","Terran Marker", P12, "EnemyArbiter")
+    ])
+    if EUDIf()(EUDSCAnd()
+    (Bring(Force1, AtLeast, 1, "Protoss Arbiter","EnemyArbiter"))
+    (Bring(Force1, AtMost, 0, "Men","EnemyArbiterGround"))
+    ()):
+        locOffset_EnemyArbiter = GetLocOffset("EnemyArbiter")
+        enemyArbiterLeft = f_dwread_epd(locOffset_EnemyArbiter) # x1(left)
+        enemyArbiterRight = f_dwread_epd(locOffset_EnemyArbiter + 2) # x2(right)
+        locOffset_DefenseRecallTerror = GetLocOffset("DefenseRecallTerror")
         DoActions([
-            CreateUnit(1, "Zerg Mutalisk", "Only20Overlord", P7),
-            KillUnit("Zerg Mutalisk", P7),
-            CreateUnit(1, "Zerg Mutalisk", "RecallDropTarget", P7),
-            KillUnit("Zerg Mutalisk", P7),
-            CreateUnit(1, "Zerg Guardian", "OverlordGatheringPoint1", P7),
-            KillUnit("Zerg Guardian", P7),
-            CreateUnit(1, "Zerg Devourer", "OverlordGatheringPoint2", P7),
-            KillUnit("Zerg Devourer", P7),
-            CreateUnit(1, "Zerg Scourge", "FollowOverlord", P7),
-            KillUnit("Zerg Scourge", P7),
-            CreateUnit(1, "Zerg Overlord", "ArbiterLoc", P7),
-            KillUnit("Zerg Overlord", P7),
-            CreateUnit(1, "Zerg Overlord", "ArbiterPathFindingLeft", P7),
-            KillUnit("Zerg Overlord", P7),
-            CreateUnit(1, "Zerg Overlord", "ArbiterPathFindingCenter", P7),
-            KillUnit("Zerg Overlord", P7),
-            CreateUnit(1, "Zerg Overlord", "ArbiterPathFindingRight", P7),
-            KillUnit("Zerg Overlord", P7),
+            SetMemoryEPD(locOffset_DefenseRecallTerror, SetTo, enemyArbiterLeft),
+            SetMemoryEPD(locOffset_DefenseRecallTerror + 2, SetTo, enemyArbiterRight),
         ])
-        #f_simpleprint('cave : ',f_dwread_epd(EPD(0x58A364) + 7*EncodeUnit("Cave")))
-    # DoActions([
-    #     CreateUnit(1, "Zerg Scourge", "FollowOverlord", P7),
-    #     KillUnit("Zerg Scourge", P7),
-    #     CreateUnit(1, "Zerg Overlord", "ArbiterLoc", P7),
-    #     KillUnit("Zerg Overlord", P7),
-    #     CreateUnit(1, "Zerg Scourge", "ArbiterSmallLoc", P7),
-    #     KillUnit("Zerg Scourge", P7),
-    #     CreateUnit(1, "Zerg Devourer", "FollowArbiter", P7),
-    #     KillUnit("Zerg Devourer", P7),
-    # ])
+    EUDEndIf()
+    ### Detect Enemy Arbiter ###
+
+    # Location Visualize
+    DoActions([
+        # CreateUnit(1, "Zerg Mutalisk", "Only20Overlord", P7),
+        # KillUnit("Zerg Mutalisk", P7),
+        # CreateUnit(1, "Zerg Mutalisk", "RecallDropTarget", P7),
+        # KillUnit("Zerg Mutalisk", P7),
+        # CreateUnit(1, "Zerg Guardian", "OverlordGatheringPoint1", P7),
+        # KillUnit("Zerg Guardian", P7),
+        # CreateUnit(1, "Zerg Devourer", "OverlordGatheringPoint2", P7),
+        # KillUnit("Zerg Devourer", P7),
+        # CreateUnit(1, "Zerg Scourge", "FollowOverlord", P7),
+        # KillUnit("Zerg Scourge", P7),
+        # CreateUnit(1, "Zerg Overlord", "ArbiterLoc", P7),
+        # KillUnit("Zerg Overlord", P7),
+        # CreateUnit(1, "Zerg Overlord", "ArbiterPathFindingLeft", P7),
+        # KillUnit("Zerg Overlord", P7),
+        # CreateUnit(1, "Zerg Overlord", "ArbiterPathFindingCenter", P7),
+        # KillUnit("Zerg Overlord", P7),
+        # CreateUnit(1, "Zerg Overlord", "ArbiterPathFindingRight", P7),
+        # KillUnit("Zerg Overlord", P7),
+        # CreateUnit(1, "Zerg Overlord", "EnemyArbiter", P7),
+        # KillUnit("Zerg Overlord", P7),
+        # CreateUnit(1, "Zerg Mutalisk", "DefenseRecallTerror", P7),
+        # KillUnit("Zerg Mutalisk", P7),
+    ])
 
 
 
+
+def CUnit(idx):
+    if idx == 0:
+        return 0x59CCA8
+    else:
+        return 0x628298 - 0x150*(idx-1)
 def ShowSupplies():
     suppliesTimer = EUDVariable(0)
     suppliesTimer += 1
