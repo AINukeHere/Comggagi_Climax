@@ -1,7 +1,7 @@
 # stat_txt.tbl entry 1344: Zerg Expansion Custom Level<0>
 ZMCx(1344, 101, aiscript):
 	multirun(SendMessage)
-	debug(Z_Load,EUD AI가 정상적으로 로드되었습니다.)
+	debug(Z_Load,EUD AI was successfully loaded.          )
 		--Z_Load--
 	start_campaign()
 	wait(1)
@@ -57,10 +57,8 @@ ZMCx(1344, 101, aiscript):
 	player_need(2, Zerg Queen's Nest)
 	player_need(3, Zerg Defiler Mound)
 
-	# zerg_ready
+	#zerg_ready
 	multirun(zerg_ready)
-	# 디바 스커지 define_max 재정의 준비
-	multirun(ChangingDefindMax)
 
 	allies_watch(4, FirstExpand)
 	multirun(TrainLoop_Zergling)
@@ -103,9 +101,9 @@ ZMCx(1344, 101, aiscript):
 
 	train(30, Zerg Mutalisk)
 	train(20, Zerg Guardian)
-	train(10, Zerg Devourer)
+	train(20, Zerg Devourer)
 	attack_add(20, Zerg Guardian)
-	attack_add(10, Zerg Devourer)
+	attack_add(20, Zerg Devourer)
 	attack_prepare()
 	allies_watch(5, FirstExpand)
 	multirun(BaseTrain1)
@@ -133,8 +131,8 @@ ZMCx(1344, 101, aiscript):
 
 		--zerg_start--
 	random_jump(85, GDS)
-	# debug(DEBUG_01, Ground Attack)
-	# 	--DEBUG_01--
+	debug(DEBUG_01, Ultra Mutal Zergling Devourer)
+		--DEBUG_01--
 	do_morph(10, Zerg Defiler)
 	wait(1)
 	do_morph(10, Zerg Defiler)
@@ -151,10 +149,9 @@ ZMCx(1344, 101, aiscript):
 	wait(1)
 	multirun(TrainLoop_Zergling)
 	wait(1)
+	multirun(TrainLoop_Devourer)
 	wait(240)
 	multirun(TrainLoop_Hydralisk)
-	wait(1)
-	multirun(TrainLoop_Devourer)
 	wait(904)
 	create_unit(Protoss Observer,3600,3900)
 		--Cannot--
@@ -168,8 +165,8 @@ ZMCx(1344, 101, aiscript):
 
 
 		--GDS--
-	# debug(DEBUG_02, Guardian Devourer Scourge)
-	# 	--DEBUG_02--
+	debug(DEBUG_02, Guardian Devourer Scourge)
+		--DEBUG_02--
 	multirun(TrainLoop_Mutalisk)
 	wait(1)
 	multirun(TrainLoop_Guardian)
@@ -248,7 +245,7 @@ ZMCx(1344, 101, aiscript):
 	wait(1)
 	goto(BaseTrain1)
 		--BaseTrain2--
-	train(10, Zerg Hydralisk)
+	#train(10, Zerg Hydralisk)
 	wait(1)
 	goto(BaseTrain2)
 		--BaseTrain3--
@@ -503,7 +500,6 @@ ZMCx(1344, 101, aiscript):
 	if_owned(1,hi2) # Terran Ghost
 	if_owned(2,hi3) # Terran Vulture
 	if_owned(3,hi4) # Terran Goliath
-	if_owned(5,NoTerran) # Terran Siege Tank
 
 	goto(SendMessage)
 
@@ -536,29 +532,3 @@ ZMCx(1344, 101, aiscript):
 		--hi4_end--
 	create_unit(20, 3673,3770) # Jim Raynor(Marine)
 	goto(SendMessage)
-
-		--NoTerran--
-	debug(noTerran_end, 테란도 없이 컴까기를 한다고? 미쳤군)
-		--noTerran_end--
-	create_unit(20, 3673,3770) # Jim Raynor(Marine)
-	goto(SendMessage)
-
-
-		--ChangingDefindMax--
-	wait(1)
-	if_owned(21, NoDevourerScourge) # Tom Kazansky (Wraith)
-	if_owned(15, YesDevourerScourge) # Terran Civilian
-	goto(ChangingDefindMax)
-
-		--NoDevourerScourge--
-	define_max(255, Zerg Devourer)
-	define_max(255, Zerg Scourge)
-	create_unit(19, 3673, 3770) # Jim Raynor (Vulture)
-	goto(ChangingDefindMax)
-
-		--YesDevourerScourge--
-	define_max(250, Zerg Devourer)
-	define_max(250, Zerg Scourge)
-	create_unit(19, 3673, 3770) # Jim Raynor (Vulture)
-	goto(ChangingDefindMax)
-	

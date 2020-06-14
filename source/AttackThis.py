@@ -120,8 +120,8 @@ class AttackThisArea(EUDStruct):
             # 정적 좌표
             (MemoryXEPD(unitPos, AtLeast, 1808, 0xFFFF)) # posX <= locX1
             (MemoryXEPD(unitPos, AtMost, 2288, 0xFFFF)) # locX2 <= posX
-            (MemoryXEPD(unitPos, AtLeast, (592+128)*0x10000, 0xFFFF0000)) # posY <= locY1
-            (MemoryXEPD(unitPos, AtMost, (864+128)*0x10000, 0xFFFF0000)) # locY2 <= posY
+            (MemoryXEPD(unitPos, AtLeast, 592*0x10000, 0xFFFF0000)) # posY <= locY1
+            (MemoryXEPD(unitPos, AtMost, 864*0x10000, 0xFFFF0000)) # locY2 <= posY
         ()):
             bTargetPlayer = EUDVariable(0)
             bTargetPlayer << 0

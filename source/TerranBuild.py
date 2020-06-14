@@ -16,8 +16,6 @@ commandCenterNum, barracksNum, factoryNum, armoryNum, starportNum, sciFacilityNu
 def BuildCommand(locString, buildingType):
     global idleSCV_epd
     locOffset = util.GetLocOffset(locString)
-    if Setting._DEBUG:
-        f_simpleprint("build" +locString )
     commandPosX = f_dwread_epd(locOffset)
     commandPosY = f_dwread_epd(locOffset+1)
     DoActions([
@@ -142,22 +140,16 @@ def AutoBuild():
                         DoActions(CreateUnit(1, "Bengalaas (Jungle Critter)", "7pBase", P7))
                     EUDEndIf()
                 EUDEndIf()
-                if EUDIf()(EUDSCAnd()
-                (Command(P7, AtLeast, 1, "Terran Science Facility"))
-                (Command(P7, AtMost, 10, "Terran Barracks"))
-                ()):
-                    DoActions([
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks1")
-                    ])
+                if EUDIf()(Command(P7, AtLeast, 1, "Terran Science Facility")):
+
+                    DoActions(CreateUnit(1, "Dark Templar (Hero)","OutsideBarracks1", P7))
                     if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks1")):
                         BuildCommand("OutsideBarracks1", EncodeUnit("Terran Barracks"))
                     EUDEndIf()
 
                     DoActions([
                         RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks2")
+                        CreateUnit(1, "Dark Templar (Hero)","OutsideBarracks2", P7)
                         ])
                     if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks2")):
                         BuildCommand("OutsideBarracks2", EncodeUnit("Terran Barracks"))
@@ -165,8 +157,7 @@ def AutoBuild():
 
                     DoActions([
                         RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks3")
+                        CreateUnit(1, "Dark Templar (Hero)","OutsideBarracks3", P7)
                         ])
                     if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks3")):
                         BuildCommand("OutsideBarracks3", EncodeUnit("Terran Barracks"))
@@ -174,8 +165,7 @@ def AutoBuild():
 
                     DoActions([
                         RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks4")
+                        CreateUnit(1, "Dark Templar (Hero)","OutsideBarracks4", P7)
                         ])
                     if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks4")):
                         BuildCommand("OutsideBarracks4", EncodeUnit("Terran Barracks"))
@@ -183,8 +173,7 @@ def AutoBuild():
 
                     DoActions([
                         RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks5")
+                        CreateUnit(1, "Dark Templar (Hero)","OutsideBarracks5", P7)
                         ])
                     if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks5")):
                         BuildCommand("OutsideBarracks5", EncodeUnit("Terran Barracks"))
@@ -192,8 +181,7 @@ def AutoBuild():
 
                     DoActions([
                         RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks6")
+                        CreateUnit(1, "Dark Templar (Hero)","OutsideBarracks6", P7)
                         ])
                     if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks6")):
                         BuildCommand("OutsideBarracks6", EncodeUnit("Terran Barracks"))
@@ -201,8 +189,7 @@ def AutoBuild():
 
                     DoActions([
                         RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks7")
+                        CreateUnit(1, "Dark Templar (Hero)","OutsideBarracks7", P7)
                         ])
                     if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks7")):
                         BuildCommand("OutsideBarracks7", EncodeUnit("Terran Barracks"))
@@ -210,8 +197,7 @@ def AutoBuild():
 
                     DoActions([
                         RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks8")
+                        CreateUnit(1, "Dark Templar (Hero)","OutsideBarracks8", P7)
                         ])
                     if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks8")):
                         BuildCommand("OutsideBarracks8", EncodeUnit("Terran Barracks"))
@@ -219,13 +205,11 @@ def AutoBuild():
 
                     DoActions([
                         RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks9")
+                        CreateUnit(1, "Dark Templar (Hero)","OutsideBarracks9", P7)
                         ])
                     if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks9")):
                         BuildCommand("OutsideBarracks9", EncodeUnit("Terran Barracks"))
                     EUDEndIf()
-                    DoActions(RemoveUnit("Dark Templar (Hero)", P7))
                 EUDEndIf()
             EUDEndIf()
         EUDEndIf()
@@ -267,17 +251,16 @@ def FindIdleSCV(epd):
         unitType = epd + 0x64 // 4
         orderID = epd + 0x4D // 4
         # Debuging
-        # if EUDIf()(EUDSCAnd()
-        # (MemoryEPD(unitType, Exactly, EncodeUnit("Terran SCV")))
-        # (MemoryXEPD(playerID, Exactly, 6, 0xFF))
-        # ()):
-        #     f_simpleprint(epd, 'orderID', f_bread_epd(orderID, 0x4D % 4))
-        # EUDEndIf()
+        if EUDIf()(EUDSCAnd()
+        (MemoryEPD(unitType, Exactly, EncodeUnit("Terran SCV")))
+        (MemoryXEPD(playerID, Exactly, 6, 0xFF))
+        ()):
+            f_simpleprint(epd, 'orderID', f_bread_epd(orderID, 0x4D % 4))
+        EUDEndIf()
         if EUDIf()(EUDSCAnd()
         (MemoryEPD(unitType, Exactly, EncodeUnit("Terran SCV")))
         (MemoryXEPD(playerID, Exactly, 6, 0xFF))
         (EUDSCOr()
-        (MemoryXEPD(orderID, Exactly, 0x0300, 0xFF00)) # 사람전용 Stop
         (MemoryXEPD(orderID, Exactly, 0x9A00, 0xFF00)) # 컴퓨터전용 Stop
         (MemoryXEPD(orderID, Exactly, 0x9C00, 0xFF00)) # 컴퓨터전용 script
         (MemoryXEPD(orderID, Exactly, 0x5500, 0xFF00)) # Move to Harvest Minerals
