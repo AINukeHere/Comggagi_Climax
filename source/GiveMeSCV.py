@@ -189,7 +189,7 @@ class StrategyGroup(EUDStruct):
                 SetMemoryEPD(DA_orderTargetPtr, SetTo, self.targetSCVPtr),
             ])
             # facing 맞춰주기
-            if EUDIf()(Deaths(P7, Exactly, 1, "Time 3")):
+            if EUDIf()(Deaths(P7, AtMost, 6, "Time 3")):
                 scvPosVal = f_dwread_epd(self.targetSCVEPD + 0x28 // 4)
                 scvPosX = f_dwbreak(scvPosVal)[0]
                 scvPosY = f_dwbreak(scvPosVal)[1]
@@ -408,6 +408,8 @@ class StrategyGroup(EUDStruct):
         if EUDSwitchCase()(GROUP_STATE_4MINDCONTROL_SCV):
             EUDBreak()
         if EUDSwitchCase()(GROUP_STATE_6RUN_AWAY):
+            EUDBreak()
+        if EUDSwitchCase()(GROUP_STATE_8IDLE):
             EUDBreak()
         EUDEndSwitch()
 
