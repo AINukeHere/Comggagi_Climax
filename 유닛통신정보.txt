@@ -16,18 +16,3 @@
         빼앗을 SCV까 없음 알림 : Ragnasaur (Ashworld Critter)
     트리거
         아비터 밑이 지상인지 체크 : Dark Templar (Hero)
-
-저그
-    aiscript > 트리거
-        공중병력 생산끝 알림 : Mojo (Scout)
-        지상병력 생산끝 알림 : Sarah Kerrigan (Ghost)
-        대사 끝 알림 : Jim Raynor (Marine)
-        디바스커지 re Define 끝 알림 : Jim Raynor (Vulture)
-    트리거 > aiscript
-        Hi1 : Terran Marine
-        Hi2 : Terran Ghost
-        Hi3 : Terran Vulture
-        Hi4 : Terran Goliath
-        NoTerran : Terran Siege Tank
-        NoDevourerScourge : Tom Kazansky (Wraith)
-        YesDevourerScourge : Terran Civilian

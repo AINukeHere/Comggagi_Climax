@@ -1,9 +1,7 @@
 [main]
-input:  basemap/컴까기 절정.scx
-output: 컴까기 절정 V1.8.scx
+input:  basemap/컴까기 특이점.scx
+output: 컴까기 특이점_Alpha_Test.scx
 
-[freeze]
-freeze: 0
 [eudTurbo]
 [unlimiter]
 [source/main.py]
