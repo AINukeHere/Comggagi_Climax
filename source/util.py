@@ -54,8 +54,8 @@ def ReaverScarabFixing(epd):
         EUDEndIf()
     EUDEndIf()
 
-IRRADIATE_AIR_UNIT_MAX = 100
-IRRADIATE_LARVA_MAX = 200
+IRRADIATE_AIR_UNIT_MAX = 200
+IRRADIATE_LARVA_MAX = 300
 irradiateOutUnits_airUnit = EUDArray(IRRADIATE_AIR_UNIT_MAX)
 irradiateOutUnits_larva = EUDArray(IRRADIATE_LARVA_MAX)
 def IrradiateOut_OnNewUnitLoop(epd):
@@ -75,7 +75,6 @@ def IrradiateOut_OnNewUnitLoop(epd):
 def IrradiateOut_Update():
     global irradiateOutUnits_airUnit, irradiateOutUnits_larva
     epd = EUDVariable(0)
-    
     for i in EUDLoopRange(0, IRRADIATE_LARVA_MAX):
         if EUDIf()(irradiateOutUnits_larva[i] != 0):
             epd << irradiateOutUnits_larva[i]
@@ -92,15 +91,13 @@ def IrradiateOut_Update():
             ((EUDNot(MemoryEPD(unitType, Exactly, EncodeUnit("Zerg Larva")))))
             ((EUDNot(MemoryEPD(unitType, Exactly, EncodeUnit("Zerg Egg")))))
             ()):
+                irradiateOutUnits_larva[i] = 0
                 if EUDIf()(MemoryEPD(unitType, Exactly, EncodeUnit("Zerg Mutalisk"))): # 뮤탈이면
                     for i in EUDLoopRange(0, IRRADIATE_AIR_UNIT_MAX):
                         if EUDIf()(irradiateOutUnits_airUnit[i] == 0):
                             irradiateOutUnits_airUnit[i] = epd
                             EUDBreak()
                         EUDEndIf()
-                if EUDElse()():
-                    irradiateOutUnits_larva[i] = 0
-                    EUDContinue()
                 EUDEndIf()
             EUDEndIf()
         EUDEndIf()
@@ -111,12 +108,14 @@ def IrradiateOut_Update():
     for i in EUDLoopRange(0, IRRADIATE_AIR_UNIT_MAX):
         if EUDIf()(irradiateOutUnits_airUnit[i] != 0):
             epd << irradiateOutUnits_airUnit[i]
-            irradiateTimer = epd + 0x118 // 4
             orderID = epd + 0x4D // 4
-            if EUDIf()(EUDSCAnd()
-            (MemoryXEPD(irradiateTimer, AtLeast, 1, 0xFF)) # 이레데이트가 걸린놈이고
-            (EUDNot(MemoryXEPD(orderID, Exactly, 0, 0xFF00))) # 죽는놈은 아니고
-            ()):
+            if EUDIf()(MemoryXEPD(orderID, Exactly, 0, 0xFF00)): # 죽었으면
+                irradiateOutUnits_airUnit[i] = 0
+                EUDContinue()
+            EUDEndIf()
+
+            irradiateTimer = epd + 0x118 // 4
+            if EUDIf()(MemoryXEPD(irradiateTimer, AtLeast, 1, 0xFF)): # 이레데이트가 걸린놈이고
                 orderTargetPos = epd+0x5C // 4
                 orderTargetPtr = epd+0x58 // 4
                 DoActions([
@@ -126,7 +125,23 @@ def IrradiateOut_Update():
                 ])
             EUDEndIf()
         EUDEndIf()
-
+def IrradiateOut(epd):
+    playerID = epd + 0x4C // 4
+    irradiateTimer = epd + 0x118 // 4
+    orderID = epd + 0x4D // 4
+    if EUDIf()(EUDSCAnd()
+    (MemoryXEPD(irradiateTimer, AtLeast, 1, 0xFF)) # 이레데이트가 걸린놈이고
+    (MemoryXEPD(playerID, Exactly, 7, 0xFF)) # 8p이고
+    (EUDNot(MemoryXEPD(orderID, Exactly, 0, 0xFF00))) # 죽는놈은 아니고
+    ()):
+        orderTargetPos = epd+0x5C // 4
+        orderTargetPtr = epd+0x58 // 4
+        DoActions([
+            SetMemoryXEPD(orderID, SetTo, 0x0600, 0xFF00),
+            SetMemoryEPD(orderTargetPos,SetTo,0),
+            SetMemoryEPD(orderTargetPtr,SetTo,0)
+        ])
+    EUDEndIf()
 initScores = EUDArray(5)
 def UpdateResourceUsed():
     global initScores

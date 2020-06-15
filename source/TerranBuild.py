@@ -3,6 +3,8 @@ import Setting
 import util
 
 SCV_ready = EUDVariable(0)
+SCV_MAX = 20
+scv_array = EUDArray(SCV_MAX)
 idleSCV_epd = EUDVariable(0)
 command_epd = EUDVariable(0)
 bCommandCenterFinishSend = EUDVariable(0)
@@ -267,12 +269,7 @@ def FindIdleSCV(epd):
         unitType = epd + 0x64 // 4
         orderID = epd + 0x4D // 4
         # Debuging
-        # if EUDIf()(EUDSCAnd()
-        # (MemoryEPD(unitType, Exactly, EncodeUnit("Terran SCV")))
-        # (MemoryXEPD(playerID, Exactly, 6, 0xFF))
-        # ()):
-        #     f_simpleprint(epd, 'orderID', f_bread_epd(orderID, 0x4D % 4))
-        # EUDEndIf()
+        f_simpleprint(epd, 'orderID', f_bread_epd(orderID, 0x4D % 4))
         if EUDIf()(EUDSCAnd()
         (MemoryEPD(unitType, Exactly, EncodeUnit("Terran SCV")))
         (MemoryXEPD(playerID, Exactly, 6, 0xFF))
@@ -316,7 +313,74 @@ def BuildingCheck(epd):
             engineeringBayNum += 1
         EUDEndIf()
     EUDEndIf()
-        
+def BuildingCheck2():
+    global commandCenterNum, barracksNum, factoryNum, armoryNum, starportNum, sciFacilityNum, academyNum, engineeringBayNum
+    commandCenterNum << 0
+    barracksNum << 0
+    factoryNum << 0
+    armoryNum << 0
+    starportNum << 0
+    sciFacilityNum << 0
+    academyNum << 0
+    engineeringBayNum << 0
+
+    if EUDWhile()(True):
+        if EUDIf()(Command(P7, AtMost, commandCenterNum, "Terran Command Center")):
+            EUDBreak()
+        if EUDElse()():
+            commandCenterNum += 1
+        EUDEndIf()
+    EUDEndWhile()
+    if EUDWhile()(True):
+        if EUDIf()(Command(P7, AtMost, barracksNum, "Terran Barracks")):
+            EUDBreak()
+        if EUDElse()():
+            barracksNum += 1
+        EUDEndIf()
+    EUDEndWhile()
+    if EUDWhile()(True):
+        if EUDIf()(Command(P7, AtMost, factoryNum, "Terran Factory")):
+            EUDBreak()
+        if EUDElse()():
+            factoryNum += 1
+        EUDEndIf()
+    EUDEndWhile()
+    if EUDWhile()(True):
+        if EUDIf()(Command(P7, AtMost, armoryNum, "Terran Armory")):
+            EUDBreak()
+        if EUDElse()():
+            armoryNum += 1
+        EUDEndIf()
+    EUDEndWhile()
+    if EUDWhile()(True):
+        if EUDIf()(Command(P7, AtMost, starportNum, "Terran Starport")):
+            EUDBreak()
+        if EUDElse()():
+            starportNum += 1
+        EUDEndIf()
+    EUDEndWhile()
+    if EUDWhile()(True):
+        if EUDIf()(Command(P7, AtMost, sciFacilityNum, "Terran Science Facility")):
+            EUDBreak()
+        if EUDElse()():
+            sciFacilityNum += 1
+        EUDEndIf()
+    EUDEndWhile()
+    if EUDWhile()(True):
+        if EUDIf()(Command(P7, AtMost, academyNum, "Terran Academy")):
+            EUDBreak()
+        if EUDElse()():
+            academyNum += 1
+        EUDEndIf()
+    EUDEndWhile()
+    if EUDWhile()(True):
+        if EUDIf()(Command(P7, AtMost, engineeringBayNum, "Terran Engineering Bay")):
+            EUDBreak()
+        if EUDElse()():
+            engineeringBayNum += 1
+        EUDEndIf()
+    EUDEndWhile()
+
 def beforeUnitLoop():
     commandCenterNum << 0
     barracksNum << 0
@@ -326,6 +390,37 @@ def beforeUnitLoop():
     sciFacilityNum << 0
     academyNum << 0
     engineeringBayNum << 0
+def addSCV(epd):
+    for i in EUDLoopRange(0, SCV_MAX):
+        if EUDIf()(scv_array[i] == 0):
+            scv_array[i] = epd
+            f_simpleprint('added : ', epd)
+            EUDBreak()
+        EUDEndIf()
+    
+def onNewUnitLoop(epd):
+    global scv_array
+    unitType = epd + 0x64 // 4
+    playerID = epd + 0x4C // 4
+    
+    if EUDIf()(EUDSCAnd()
+    (MemoryEPD(unitType, Exactly, EncodeUnit("Terran SCV")))
+    (MemoryXEPD(playerID, Exactly, 6, 0xFF))
+    ()):
+        addSCV(epd)
+    EUDEndIf()
+    
+    if EUDIf()(command_epd == 0):
+        if EUDIf()(EUDSCAnd()
+        (MemoryEPD(unitType, Exactly, EncodeUnit("Terran Command Center")))
+        (MemoryXEPD(playerID, Exactly, 6, 0xFF))
+        ()):
+            command_epd << epd
+        EUDEndIf()
+    if EUDElseIf()(MemoryXEPD(epd + 0x4D // 4, Exactly, 0, 0xFF00)):
+        command_epd << 0
+    EUDEndIf()
+
 def onUnitLoop(epd):
     global command_epd
     FindIdleSCV(epd)
@@ -342,6 +437,22 @@ def onUnitLoop(epd):
     if EUDElseIf()(MemoryXEPD(epd + 0x4D // 4, Exactly, 0, 0xFF00)):
         command_epd << 0
     EUDEndIf()
+def Update():
+    global command_epd, scv_array
+    for i in EUDLoopRange(0, SCV_MAX):
+        if EUDIf()(scv_array[i] != 0):
+            orderID = scv_array[i] + 0x4D // 4
+            if EUDIf()(MemoryXEPD(orderID, Exactly, 0, 0xFF00)): # 죽으면
+                scv_array[i] = 0
+                EUDContinue()
+            EUDEndIf()
+
+            FindIdleSCV(scv_array[i])
+        EUDEndIf()
+    BuildingCheck2()
+    AutoBuild()
+    AIScriptMessageDispatcher()
+
 def afterUnitLoop():
     AutoBuild()
     AIScriptMessageDispatcher()

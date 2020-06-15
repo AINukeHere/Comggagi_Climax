@@ -85,21 +85,24 @@ def beforeTriggerExec():
     for ptr,epd in LoopNewUnit():
         FxingReaverScarab.onNewUnitLoop(epd)
         util.IrradiateOut_OnNewUnitLoop(epd)
+        TerranBuild.onNewUnitLoop(epd)
+    FxingReaverScarab.beforeTriggerExec() # 스캐럽 1개로 고정
+    util.IrradiateOut_Update() # 이레디 맞은 유닛 빼기
+    TerranBuild.Update()
 
     ### UnitLoop ###
     if EUDIf()(flag == 1):
         group.beforeUnitLoop() # SCV 가져오는 그룹
-        TerranBuild.beforeUnitLoop() # 테란하자
-        # for ptr,epd in EUDLoopUnit():
-            #group.UnitLoopUpdate(ptr, epd)
+        #TerranBuild.beforeUnitLoop() # 테란하자
+        for ptr,epd in EUDLoopUnit():
+            #util.IrradiateOut(epd)
+            group.UnitLoopUpdate(ptr, epd)
             #TerranBuild.onUnitLoop(epd)
         group.afterUnitLoop()
-        TerranBuild.afterUnitLoop()
+        #TerranBuild.afterUnitLoop()
     EUDEndIf()
     
 
-    util.IrradiateOut_Update() # 이레디 맞은 유닛 빼기
-    FxingReaverScarab.beforeTriggerExec() # 스캐럽 1개로 고정
     util.LocationResizing() # 각종 로케이션 위치갱신
     DefenseSystem.detectTimingRush() # 적 병력 움직임 체크
 

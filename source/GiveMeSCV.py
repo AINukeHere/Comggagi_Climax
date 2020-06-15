@@ -300,6 +300,7 @@ class StrategyGroup(EUDStruct):
                     if Setting._DEBUG:
                         f_simpleprint('IDLE')
                     TerranBuild.SCV_ready << 1
+                    TerranBuild.addSCV(self.targetSCVEPD)
                     TerranBuild.idleSCV_epd << self.targetSCVEPD
                     TerranBuild.bSCVArrived << 1
                 EUDEndIf()
