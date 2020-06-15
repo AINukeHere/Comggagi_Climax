@@ -85,21 +85,22 @@ def beforeTriggerExec():
     for ptr,epd in LoopNewUnit():
         FxingReaverScarab.onNewUnitLoop(epd)
         util.IrradiateOut_OnNewUnitLoop(epd)
-        TerranBuild.onNewUnitLoop(epd)
+        TerranBuild.onNewUnitLoop(epd) # 테란건물짓기
     FxingReaverScarab.beforeTriggerExec() # 스캐럽 1개로 고정
     util.IrradiateOut_Update() # 이레디 맞은 유닛 빼기
-    TerranBuild.Update()
 
     ### UnitLoop ###
     if EUDIf()(flag == 1):
+        TerranBuild.Update() # 테란건물짓기
         group.beforeUnitLoop() # SCV 가져오는 그룹
-        #TerranBuild.beforeUnitLoop() # 테란하자
-        for ptr,epd in EUDLoopUnit():
-            #util.IrradiateOut(epd)
-            group.UnitLoopUpdate(ptr, epd)
-            #TerranBuild.onUnitLoop(epd)
+        if EUDIf()(EUDSCOr()
+        (group.groupState == GROUP_STATE_0FIND_MEMBER)
+        (group.groupState == GROUP_STATE_2FIND_SCV)
+        ()):
+            for ptr,epd in EUDLoopUnit():
+                group.UnitLoopUpdate(ptr, epd)
+        EUDEndIf()
         group.afterUnitLoop()
-        #TerranBuild.afterUnitLoop()
     EUDEndIf()
     
 

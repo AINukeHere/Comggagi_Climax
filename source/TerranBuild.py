@@ -269,7 +269,7 @@ def FindIdleSCV(epd):
         unitType = epd + 0x64 // 4
         orderID = epd + 0x4D // 4
         # Debuging
-        f_simpleprint(epd, 'orderID', f_bread_epd(orderID, 0x4D % 4))
+        #f_simpleprint(epd, 'orderID', f_bread_epd(orderID, 0x4D % 4))
         if EUDIf()(EUDSCAnd()
         (MemoryEPD(unitType, Exactly, EncodeUnit("Terran SCV")))
         (MemoryXEPD(playerID, Exactly, 6, 0xFF))
@@ -394,7 +394,6 @@ def addSCV(epd):
     for i in EUDLoopRange(0, SCV_MAX):
         if EUDIf()(scv_array[i] == 0):
             scv_array[i] = epd
-            f_simpleprint('added : ', epd)
             EUDBreak()
         EUDEndIf()
     
