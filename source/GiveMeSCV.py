@@ -53,8 +53,10 @@ class StrategyGroup(EUDStruct):
         SH_orderTargetPos = self.ShuttleEPD + 0x58 // 4
         SH_lockdownTimer = self.ShuttleEPD + 0x117 // 4
 
+        SCV_playerID = self.targetSCVEPD + 0x4C // 4
         SCV_orderID = self.targetSCVEPD + 0x4D // 4
         SCV_connectedUnit = self.targetSCVEPD + 0x80 // 4
+        SCV_HP = self.targetSCVEPD + 0x08 // 4
         # unused
         # SCV_orderTargetPtr = self.targetSCVEPD + 0x5C // 4
 
@@ -90,10 +92,12 @@ class StrategyGroup(EUDStruct):
         if EUDIf()(EUDSCAnd() # SCV는 데리러갈때부터 끝까지 계속 필요
         (self.groupState >= GROUP_STATE_3GO_TO_SCV)
         (self.groupState <= GROUP_STATE_7ARRIVE_BASE)
+        (EUDNot(MemoryXEPD(SCV_playerID, Exactly, 6, 0xFF)))
         ()):
             if EUDIf()(EUDSCOr()
             (MemoryXEPD(SCV_orderID, Exactly, 0x0000, 0xFF00)) # SCV가 죽거나
             (MemoryXEPD(SCV_orderID, Exactly, 0x0500, 0xFF00)) # 벙커에 있거나
+            (MemoryEPD(SCV_HP, AtMost, 15359)) # 체력이 깎였거나
             ()):
                 self.targetSCVEPD = 0
                 self.targetSCVPtr = 0
@@ -173,7 +177,6 @@ class StrategyGroup(EUDStruct):
             EUDEndIf()
             EUDBreak()
         if EUDSwitchCase()(GROUP_STATE_4MINDCONTROL_SCV):
-            SCV_playerID = self.targetSCVEPD + 0x4C // 4
             # SCV 가져왔으면 다음 단계로
             if EUDIf()(MemoryXEPD(SCV_playerID, Exactly, 6, 0xFF)):
                 if Setting._DEBUG:
@@ -375,10 +378,12 @@ class StrategyGroup(EUDStruct):
             unitType = epd + 0x64 // 4
             playerID = epd + 0x4C // 4
             orderID = epd + 0x4D // 4
+            hitPoint = epd + 0x08 // 4
             # SCV가 있으면 거리를 계산해둠
             if EUDIf()(EUDSCAnd()
             (MemoryEPD(unitType, Exactly, EncodeUnit("Terran SCV")))
             (EUDNot(MemoryXEPD(orderID, Exactly, 0x0500, 0xFF00))) # 벙커에 있지 않거나
+            (MemoryEPD(hitPoint, Exactly, 60*256)) # 풀피인 SCV만 취급
             (EUDSCOr()
             (MemoryXEPD(playerID, Exactly, 0, 0xFF))
             (MemoryXEPD(playerID, Exactly, 1, 0xFF))

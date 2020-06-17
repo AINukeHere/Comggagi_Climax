@@ -5,8 +5,6 @@ import Setting
 import TerranBuild
 import DefenseSystem
 import FxingReaverScarab
-
-
 group = EUDVariable(0)
 def onPluginStart():
     if Setting.CHEAT_DEBUG:
