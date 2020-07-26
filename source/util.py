@@ -1,6 +1,6 @@
 from eudplib import *
 import Setting
-
+import EntranceAttack
 def GetLocOffset(locString):
     return EPD(0x58DC60) + (EncodeLocation(locString) - 1)*5
 def ReaverScarabFixing(epd):
@@ -98,6 +98,11 @@ def IrradiateOut_Update():
                             irradiateOutUnits_airUnit[i] = epd
                             EUDBreak()
                         EUDEndIf()
+                if EUDElseIf()(EUDSCOr()
+                (MemoryEPD(unitType, Exactly, EncodeUnit("Zerg Zergling")))
+                (MemoryEPD(unitType, Exactly, EncodeUnit("Zerg Hydralisk")))
+                ()):
+                    EntranceAttack.AddAttacker(epd)
                 EUDEndIf()
             EUDEndIf()
         EUDEndIf()

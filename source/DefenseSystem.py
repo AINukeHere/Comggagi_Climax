@@ -49,13 +49,13 @@ def detectTimingRush():
         locOffset = util.GetLocOffset("TimingRushDefenseArea")
         if EUDIf()(Deaths(P7, Exactly, 1, "Flag")):
             DoActions([
-                MoveLocation("TimingRushDefenseArea","Terran Marker", P12, "LeftAttackRoute1"),
+                MoveLocation("TimingRushDefenseArea", "Terran Marker", P12, "LeftAttackRoute1"),
                 SetMemoryEPD(locOffset + 1, SetTo, 3712),
                 SetMemoryEPD(locOffset + 3, SetTo, 4096)
             ])
         if EUDElseIf()(Deaths(P7, Exactly, 2, "Flag")):
             DoActions([
-                MoveLocation("TimingRushDefenseArea","Terran Marker", P12, "LeftAttackRoute2"),
+                MoveLocation("TimingRushDefenseArea", "Terran Marker", P12, "LeftAttackRoute2"),
                 SetMemoryEPD(locOffset + 1, SetTo, 2752),
                 SetMemoryEPD(locOffset + 3, SetTo, 3136)
             ])
@@ -72,10 +72,17 @@ def detectTimingRush():
                 SetMemoryEPD(locOffset + 3, SetTo, 4096)
             ])
         EUDEndIf()
+        DoActions([
+            Order("Protoss Reaver", P7, "RightAttackRoute1", Attack, "TimingRushDefenseArea"),
+            Order("Protoss Reaver", P7, "RightAttackRoute2", Attack, "TimingRushDefenseArea")
+        ])
     EUDEndIf()
 
     # 가장 아래에 있는 적을 찾음
     if EUDIf()(Bring(Force1, AtMost, 5, "Men", "TimingRushDefenseArea")):
+        if EUDIf()(MemoryEPD(locOffset +  1, AtMost, 1568)):
+            bDetectBegin << 0
+        EUDEndIf()
         DoActions([
             SetMemoryEPD(locOffset + 1, Subtract, 32),
             SetMemoryEPD(locOffset + 3, Subtract, 32)

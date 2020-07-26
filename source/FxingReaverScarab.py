@@ -14,8 +14,6 @@ def onNewUnitLoop(epd):
         reavers[nextReaverIdx] = epd
         if Setting.ReaverFixDebug:
             f_simpleprint('new Reaver : ', nextReaverIdx, reavers[nextReaverIdx], epd)
-        # for i in EUDLoopRange(0, 5):#SUPPORT_REAVER_MAX):
-        #     f_simpleprint('r[i]:',reavers[i])
         for i in EUDLoopRange(0, SUPPORT_REAVER_MAX):
             if EUDIf()(EUDSCOr()
             (reavers[i] == 0)

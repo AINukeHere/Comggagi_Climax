@@ -81,153 +81,154 @@ def AutoBuild():
                             f_simpleprint("build Factory5")
                         BuildCommand("Factory5", EncodeUnit("Terran Factory"))
                     EUDEndIf()
-                EUDEndIf()
-                if EUDIf()(Command(P7, AtLeast, 1, "Terran Factory")):
-                    if EUDIf()(bFactoryFinishSend == 0):
-                        bFactoryFinishSend << 1
-                        DoActions(CreateUnit(1, "Artanis (Scout)", "7pBase", P7))
+                if EUDElse()():
+                    if EUDIf()(Command(P7, AtLeast, 1, "Terran Factory")):
+                        if EUDIf()(bFactoryFinishSend == 0):
+                            bFactoryFinishSend << 1
+                            DoActions(CreateUnit(1, "Artanis (Scout)", "7pBase", P7))
+                        EUDEndIf()
+                        if EUDIf()(academyNum == 0):
+                            if Setting._DEBUG:
+                                f_simpleprint("build Academy")
+                            BuildCommand("Academy", EncodeUnit("Terran Academy"))
+                        EUDEndIf()
+                        if EUDIf()(engineeringBayNum == 0):
+                            if Setting._DEBUG:
+                                f_simpleprint("build Engineering Bay1")
+                            BuildCommand("EngineeringBay1", EncodeUnit("Terran Engineering Bay"))
+                        if EUDElseIf()(engineeringBayNum == 1):
+                            if Setting._DEBUG:
+                                f_simpleprint("build Engineering Bay2")
+                            BuildCommand("EngineeringBay2", EncodeUnit("Terran Engineering Bay"))
+                        EUDEndIf()
+                        if EUDIf()(armoryNum == 0):
+                            if Setting._DEBUG:
+                                f_simpleprint("build Armory1")
+                            BuildCommand("Armory1", EncodeUnit("Terran Armory"))
+                        if EUDElseIf()(armoryNum == 1):
+                            if Setting._DEBUG:
+                                f_simpleprint("build Armory2")
+                            BuildCommand("Armory2", EncodeUnit("Terran Armory"))
+                        EUDEndIf()
+                        if EUDIf()(starportNum == 0):
+                            if Setting._DEBUG:
+                                f_simpleprint("build Starport")
+                            BuildCommand("Starport", EncodeUnit("Terran Starport"))
+                        EUDEndIf()
                     EUDEndIf()
-                    if EUDIf()(academyNum == 0):
+                    if EUDIf()(EUDSCAnd()
+                    (Command(P7, AtLeast, 1, "Terran Machine Shop")) 
+                    (bMachineShopFinishSend == 0)
+                    ()):
+                        bMachineShopFinishSend << 1
+                        DoActions(CreateUnit(1, "Mojo (Scout)", "7pBase", P7))
+                    EUDEndIf()
+                    if EUDIf()(EUDSCAnd()
+                    (Command(P7, AtLeast, 2, "Terran Armory")) 
+                    (bArmoryFinishSend == 0)
+                    ()):
+                        bArmoryFinishSend << 1
+                        DoActions(CreateUnit(1, "Gantrithor (Carrier)", "7pBase", P7))
+                    EUDEndIf()
+                    if EUDIf()(EUDSCAnd()
+                    (Command(P7, AtLeast, 1, "Terran Starport"))
+                    (sciFacilityNum == 0)
+                    ()):
                         if Setting._DEBUG:
-                            f_simpleprint("build Academy")
-                        BuildCommand("Academy", EncodeUnit("Terran Academy"))
+                            f_simpleprint("build Science Facility")
+                        BuildCommand("Science Facility", EncodeUnit("Terran Science Facility"))
                     EUDEndIf()
-                    if EUDIf()(engineeringBayNum == 0):
-                        if Setting._DEBUG:
-                            f_simpleprint("build Engineering Bay1")
-                        BuildCommand("EngineeringBay1", EncodeUnit("Terran Engineering Bay"))
-                    if EUDElseIf()(engineeringBayNum == 1):
-                        if Setting._DEBUG:
-                            f_simpleprint("build Engineering Bay2")
-                        BuildCommand("EngineeringBay2", EncodeUnit("Terran Engineering Bay"))
+                    if EUDIf()(Command(P7, AtLeast, 2, "Terran Engineering Bay")):
+                        if EUDIf()(bEngineeringBayFinishSend == 0):
+                            bEngineeringBayFinishSend << 1
+                            DoActions(CreateUnit(1, "Bengalaas (Jungle Critter)", "7pBase", P7))
+                        EUDEndIf()
                     EUDEndIf()
-                    if EUDIf()(armoryNum == 0):
-                        if Setting._DEBUG:
-                            f_simpleprint("build Armory1")
-                        BuildCommand("Armory1", EncodeUnit("Terran Armory"))
-                    if EUDElseIf()(armoryNum == 1):
-                        if Setting._DEBUG:
-                            f_simpleprint("build Armory2")
-                        BuildCommand("Armory2", EncodeUnit("Terran Armory"))
-                    EUDEndIf()
-                    if EUDIf()(starportNum == 0):
-                        if Setting._DEBUG:
-                            f_simpleprint("build Starport")
-                        BuildCommand("Starport", EncodeUnit("Terran Starport"))
-                    EUDEndIf()
-                EUDEndIf()
-                if EUDIf()(EUDSCAnd()
-                (Command(P7, AtLeast, 1, "Terran Machine Shop")) 
-                (bMachineShopFinishSend == 0)
-                ()):
-                    bMachineShopFinishSend << 1
-                    DoActions(CreateUnit(1, "Mojo (Scout)", "7pBase", P7))
-                EUDEndIf()
-                if EUDIf()(EUDSCAnd()
-                (Command(P7, AtLeast, 2, "Terran Armory")) 
-                (bArmoryFinishSend == 0)
-                ()):
-                    bArmoryFinishSend << 1
-                    DoActions(CreateUnit(1, "Gantrithor (Carrier)", "7pBase", P7))
-                EUDEndIf()
-                if EUDIf()(EUDSCAnd()
-                (Command(P7, AtLeast, 1, "Terran Starport"))
-                (sciFacilityNum == 0)
-                ()):
-                    if Setting._DEBUG:
-                        f_simpleprint("build Science Facility")
-                    BuildCommand("Science Facility", EncodeUnit("Terran Science Facility"))
-                EUDEndIf()
-                if EUDIf()(Command(P7, AtLeast, 2, "Terran Engineering Bay")):
-                    if EUDIf()(bEngineeringBayFinishSend == 0):
-                        bEngineeringBayFinishSend << 1
-                        DoActions(CreateUnit(1, "Bengalaas (Jungle Critter)", "7pBase", P7))
-                    EUDEndIf()
-                EUDEndIf()
-                if EUDIf()(EUDSCAnd()
-                (Command(P7, AtLeast, 1, "Terran Science Facility"))
-                (Command(P7, AtMost, 10, "Terran Barracks"))
-                ()):
-                    DoActions([
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks1")
-                    ])
-                    if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks1")):
-                        BuildCommand("OutsideBarracks1", EncodeUnit("Terran Barracks"))
-                    EUDEndIf()
-
-                    DoActions([
-                        RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks2")
+                    if EUDIf()(EUDSCAnd()
+                    (Command(P7, AtLeast, 1, "Terran Science Facility"))
+                    (Command(P7, AtMost, 10, "Terran Barracks"))
+                    ()):
+                        DoActions([
+                            CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
+                            MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks1")
                         ])
-                    if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks2")):
-                        BuildCommand("OutsideBarracks2", EncodeUnit("Terran Barracks"))
-                    EUDEndIf()
+                        if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks1")):
+                            BuildCommand("OutsideBarracks1", EncodeUnit("Terran Barracks"))
+                        EUDEndIf()
 
-                    DoActions([
-                        RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks3")
-                        ])
-                    if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks3")):
-                        BuildCommand("OutsideBarracks3", EncodeUnit("Terran Barracks"))
-                    EUDEndIf()
+                        DoActions([
+                            RemoveUnit("Dark Templar (Hero)", P7),
+                            CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
+                            MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks2")
+                            ])
+                        if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks2")):
+                            BuildCommand("OutsideBarracks2", EncodeUnit("Terran Barracks"))
+                        EUDEndIf()
 
-                    DoActions([
-                        RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks4")
-                        ])
-                    if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks4")):
-                        BuildCommand("OutsideBarracks4", EncodeUnit("Terran Barracks"))
-                    EUDEndIf()
+                        DoActions([
+                            RemoveUnit("Dark Templar (Hero)", P7),
+                            CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
+                            MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks3")
+                            ])
+                        if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks3")):
+                            BuildCommand("OutsideBarracks3", EncodeUnit("Terran Barracks"))
+                        EUDEndIf()
 
-                    DoActions([
-                        RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks5")
-                        ])
-                    if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks5")):
-                        BuildCommand("OutsideBarracks5", EncodeUnit("Terran Barracks"))
-                    EUDEndIf()
+                        DoActions([
+                            RemoveUnit("Dark Templar (Hero)", P7),
+                            CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
+                            MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks4")
+                            ])
+                        if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks4")):
+                            BuildCommand("OutsideBarracks4", EncodeUnit("Terran Barracks"))
+                        EUDEndIf()
 
-                    DoActions([
-                        RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks6")
-                        ])
-                    if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks6")):
-                        BuildCommand("OutsideBarracks6", EncodeUnit("Terran Barracks"))
-                    EUDEndIf()
+                        DoActions([
+                            RemoveUnit("Dark Templar (Hero)", P7),
+                            CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
+                            MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks5")
+                            ])
+                        if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks5")):
+                            BuildCommand("OutsideBarracks5", EncodeUnit("Terran Barracks"))
+                        EUDEndIf()
 
-                    DoActions([
-                        RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks7")
-                        ])
-                    if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks7")):
-                        BuildCommand("OutsideBarracks7", EncodeUnit("Terran Barracks"))
-                    EUDEndIf()
+                        DoActions([
+                            RemoveUnit("Dark Templar (Hero)", P7),
+                            CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
+                            MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks6")
+                            ])
+                        if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks6")):
+                            BuildCommand("OutsideBarracks6", EncodeUnit("Terran Barracks"))
+                        EUDEndIf()
 
-                    DoActions([
-                        RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks8")
-                        ])
-                    if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks8")):
-                        BuildCommand("OutsideBarracks8", EncodeUnit("Terran Barracks"))
-                    EUDEndIf()
+                        DoActions([
+                            RemoveUnit("Dark Templar (Hero)", P7),
+                            CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
+                            MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks7")
+                            ])
+                        if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks7")):
+                            BuildCommand("OutsideBarracks7", EncodeUnit("Terran Barracks"))
+                        EUDEndIf()
 
-                    DoActions([
-                        RemoveUnit("Dark Templar (Hero)", P7),
-                        CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
-                        MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks9")
-                        ])
-                    if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks9")):
-                        BuildCommand("OutsideBarracks9", EncodeUnit("Terran Barracks"))
+                        DoActions([
+                            RemoveUnit("Dark Templar (Hero)", P7),
+                            CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
+                            MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks8")
+                            ])
+                        if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks8")):
+                            BuildCommand("OutsideBarracks8", EncodeUnit("Terran Barracks"))
+                        EUDEndIf()
+
+                        DoActions([
+                            RemoveUnit("Dark Templar (Hero)", P7),
+                            CreateUnit(1, "Dark Templar (Hero)","7pBase", P7),
+                            MoveUnit(All, "Dark Templar (Hero)", P7, "Anywhere", "OutsideBarracks9")
+                            ])
+                        if EUDIf()(Bring(P7, AtLeast, 1, "Dark Templar (Hero)", "OutsideBarracks9")):
+                            BuildCommand("OutsideBarracks9", EncodeUnit("Terran Barracks"))
+                        EUDEndIf()
+                        DoActions(RemoveUnit("Dark Templar (Hero)", P7))
                     EUDEndIf()
-                    DoActions(RemoveUnit("Dark Templar (Hero)", P7))
                 EUDEndIf()
             EUDEndIf()
         EUDEndIf()

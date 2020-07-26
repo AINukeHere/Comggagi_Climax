@@ -329,7 +329,7 @@ PSUx(1514, 101, aiscript):
 	wait(1)
 	goto(CommandCenterFinishReady)
 		--CommandCenterFinish--
-	create_unit(75,307,3300) # Zeratul
+	create_unit(75,307,3300) # Zeratul (Dark Templar)
 	# debug(DEBUG_LOG_02, Zeratul Created. Command Center Completed)
 	# 	--DEBUG_LOG_02--
 	wait(300)
@@ -340,7 +340,7 @@ PSUx(1514, 101, aiscript):
 
 
 		--FactoryTrainLoopReady--
-	if_owned(88, FactoryTrainLoopStart) # Artanis
+	if_owned(88, FactoryTrainLoopStart) # Artanis (Scout)
 	wait(1)
 	goto(FactoryTrainLoopReady)
 		--FactoryTrainLoopStart--
@@ -395,8 +395,7 @@ PSUx(1514, 101, aiscript):
 	defenseuse_gg(1, Terran Siege Tank)
 	defensebuild_gg(1, Terran Goliath)
 	defenseuse_gg(1, Terran Goliath)
-	tech(Spider Mines, 30)
-	upgrade(1, Ion Thrusters, 30)
+	upgrade(1, Charon Booster, 30)
 	stop()
 
 

@@ -71,42 +71,29 @@ ZMCx(1344, 101, aiscript):
 	multirun(TrainLoop_Hydralisk)
 	wait(1000)
 	create_unit(Protoss Observer,3600,3900)
-	wait(500)
-	wait(1)
+	wait(100)
+	multirun(TrainLoop_Mutalisk)
+	wait(2400)
 
-	# train(12, Zerg Ultralisk) # 48
-	# train(20, Zerg Hydralisk) # 20
-	# train(50, Zerg Mutalisk) # 100
-	#multirun(TrainLoop_Zergling)
-	#wait(7)
-	#multirun(TrainLoop_Hydralisk)
-	#wait(96)
-	#multirun(TrainLoop_Ultralisk)
-	#wait(600)
-	#create_unit(Protoss Observer,3600,3900)
-	# train(60, Zerg Zergling)
-	# multirun(TrainLoop_Mutalisk)
-
-	wait(300)
-	# create_unit(Protoss Observer,3600,3900)
-	wait(500)
-
-	wait(1200)
-	train(50, Zerg Mutalisk)
 	attack_add(50, Zerg Mutalisk)
 	attack_prepare()
-	multirun(TrainLoop_Mutalisk)
+	# debug(DEBUG_03, mutalisk prepare)
+	# 	--DEBUG_03--
 	wait(300)
-	create_unit(Protoss Observer,3600,3900)
 	attack_do()
 	attack_clear()
-
-	train(30, Zerg Mutalisk)
-	train(20, Zerg Guardian)
-	train(10, Zerg Devourer)
+	multirun(TrainLoop_Guardian)
+	wait(240)
+	multirun(TrainLoop_Devourer)
 	attack_add(20, Zerg Guardian)
 	attack_add(10, Zerg Devourer)
 	attack_prepare()
+	wait(1)
+	# debug(DEBUG_04, GD prepare)
+	# 	--DEBUG_04--
+	attack_do()
+	attack_clear()
+	create_unit(Protoss Observer,3600,3900)
 	allies_watch(5, FirstExpand)
 	multirun(BaseTrain1)
 	multirun(BaseTrain2)
@@ -115,8 +102,6 @@ ZMCx(1344, 101, aiscript):
 	multirun(BaseTrain5)
 	multirun(BaseTrain6)
 	wait(300)
-	attack_do()
-	attack_clear()
 
 
 	wait(4320)
@@ -127,7 +112,7 @@ ZMCx(1344, 101, aiscript):
 
 
 		--zerg_ready--
-	if_owned(Protoss Zealot,zerg_start)
+	if_owned(Protoss Zealot, zerg_start)
 	wait(1)
 	goto(zerg_ready)
 
@@ -424,7 +409,7 @@ ZMCx(1344, 101, aiscript):
 
 		--NormalExpand--
 	start_town()
-	get_oldpeons(10)
+	get_oldpeons(5)
 	build(1, Zerg Hatchery, 80)
 	wait_buildstart(1, Zerg Hatchery)
 	build(3, Zerg Drone,80)	
@@ -436,26 +421,16 @@ ZMCx(1344, 101, aiscript):
 	wait_buildstart(4, Zerg Hatchery)
 	build(5, Zerg Hatchery, 80)
 	wait_buildstart(5, Zerg Hatchery)
-	build(6, Zerg Hatchery, 80)
-	wait_buildstart(6, Zerg Hatchery)
-	build(7, Zerg Hatchery, 80)
-	wait_buildstart(7, Zerg Hatchery)
-	build(8, Zerg Hatchery, 80)
-	wait_buildstart(8, Zerg Hatchery)
-	build(9, Zerg Hatchery, 80)
-	wait_buildstart(9, Zerg Hatchery)
-	build(10, Zerg Hatchery, 80)
-	wait_buildstart(10, Zerg Hatchery)
 	place_guard(Zerg Defiler, 1)
-	wait_build(1, Zerg Hatchery)
 	player_need(2, Zerg Spawning Pool)
 	player_need(2, Zerg Hydralisk Den)
-	wait_build(10, Zerg Hatchery)
-	build(10, Zerg Lair, 80)
-	wait_build(10, Zerg Lair)
+	wait_build(5, Zerg Hatchery)
+	build(5, Zerg Lair, 80)
+	wait_build(5, Zerg Lair)
 	player_need(2, Zerg Spire)
 	player_need(2, Zerg Queen's Nest)
-	build(10, Zerg Hive, 80)
+	build(5, Zerg Hive, 80)
+	wait_build(5, Zerg Hive)
 	player_need(2, Zerg Ultralisk Cavern)
 	player_need(2, Zerg Defiler Mound)
 	player_need(2, Zerg Greater Spire)
@@ -538,7 +513,10 @@ ZMCx(1344, 101, aiscript):
 	goto(SendMessage)
 
 		--NoTerran--
-	debug(noTerran_end, 테란도 없이 컴까기를 한다고? 미쳤군)
+	debug(noTerran_continue, 테란도 없이 컴까기를 하겠다고?)
+		--noTerran_continue--
+	wait(24)
+	debug(noTerran_end, 감당할 수 있겠냐?)
 		--noTerran_end--
 	create_unit(20, 3673,3770) # Jim Raynor(Marine)
 	goto(SendMessage)

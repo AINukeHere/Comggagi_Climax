@@ -5,6 +5,8 @@ import Setting
 import TerranBuild
 import DefenseSystem
 import FxingReaverScarab
+import EntranceAttack
+
 group = EUDVariable(0)
 def onPluginStart():
     if Setting.CHEAT_DEBUG:
@@ -81,9 +83,11 @@ def beforeTriggerExec():
 
     ### NewUnitLoop ###
     for ptr,epd in LoopNewUnit():
+        EntranceAttack.onNewUnitLoop(epd)
         FxingReaverScarab.onNewUnitLoop(epd)
         util.IrradiateOut_OnNewUnitLoop(epd)
         TerranBuild.onNewUnitLoop(epd) # 테란건물짓기
+    EntranceAttack.Update()
     FxingReaverScarab.beforeTriggerExec() # 스캐럽 1개로 고정
     util.IrradiateOut_Update() # 이레디 맞은 유닛 빼기
 
@@ -109,7 +113,7 @@ def beforeTriggerExec():
     ###           DEBUG CODE            ###
     #######################################
     
-    #util.ShowSupplies() # 인구수 출력
+    # util.ShowSupplies() # 인구수 출력
     # 클릭한 유닛 정보 표시
     if Setting._DEBUG:
         P1_Select_ptr = f_dwread_epd(EPD(0x6284E8))
@@ -155,7 +159,7 @@ def afterTriggerExec():
 
 newCUnit = EUDArray(1700 * 336)
 epd2newCUnit = EPD(newCUnit) - EPD(0x59CCA8)
-def LoopNewUnit(allowance=2):
+def LoopNewUnit(allowance=18):
     firstUnitPtr = EPD(0x628430)
     EUDCreateBlock("newunitloop", "newlo")
     tos0 = EUDLightVariable()
