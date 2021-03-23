@@ -1,6 +1,0 @@
-[main]
-input:  basemap/사기수법.scx
-output: 사기수법_out.scx
-
-[source/CUnitTest.py]
-[source/temp/사기수법.py]
