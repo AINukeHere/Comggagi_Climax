@@ -1,8 +1,0 @@
-[main]
-input:  basemap/tempMap.scx
-output: tempMap_out.scx
-
-[eudTurbo]
-#[source/temp/testMapmain.py]
-[source/CUnitTest.py]
-#[unlimiter]
