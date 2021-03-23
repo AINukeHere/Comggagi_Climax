@@ -9,6 +9,7 @@ import EntranceAttack
 
 group = EUDVariable(0)
 def onPluginStart():
+    
     if Setting.CHEAT_DEBUG:
         DoActions([
             CreateUnit(1, "Terran Civilian", "CheatBeaconMove", P4),

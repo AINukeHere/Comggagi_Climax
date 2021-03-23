@@ -74,6 +74,7 @@ ZMCx(1344, 101, aiscript):
 	wait(100)
 	multirun(TrainLoop_Mutalisk)
 	wait(2400)
+	wait(240)
 
 	attack_add(50, Zerg Mutalisk)
 	attack_prepare()
